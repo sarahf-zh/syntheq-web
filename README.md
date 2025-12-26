@@ -46,11 +46,6 @@ We developed a regression-based **"Health Access Disparity Score"** to quantify 
 ### 3. Real-Time Inference Engine (Client-Side)
 Unlike traditional GIS tools that rely on slow server-side processing, SynthEquity performs inference entirely in the browser using React and TypeScript.
 
-**Archteciture Diagram:**
-<div align="center">
-  <img src="./synthequity/images/synthequity_arch.png" alt="Technical Architecture" width="350">
-</div>
-
 ---
 
 ## 🛠 Tech Stack
@@ -60,6 +55,11 @@ Unlike traditional GIS tools that rely on slow server-side processing, SynthEqui
 * **AI/ML:** Python, SDV (Synthetic Data Vault), CTGAN, Scikit-Learn (for regression modeling)
 * **Data Validation:** Kolmogorov-Smirnov (KS) Test, Pearson’s Correlation Matrix
 
+**Archteciture Diagram:**
+
+SynthEquity utilizes a Generative AI model (CTGAN) to produce a privacy-preserving synthetic population from public data. A multivariate regression model is then trained on this synthetic population to power real-time inference for the browser-based dashboard, calculating health disparity scores to identify medical deserts and simulate intervention impacts.
+
+![Architecture Diagram](./synthequity/images/synthequity_arch.png)
 ---
 
 ## 📊 Validation
