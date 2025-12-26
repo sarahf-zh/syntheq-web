@@ -29,7 +29,7 @@ While granular analysis solves this, privacy laws (like HIPAA) prevent access to
 
 ---
 
-## ⚙️ Architecture & Engineering Goals
+## ⚙️ Engineering Goals
 
 ### 1. Data Synthesis Pipeline (Offline)
 We utilize a **Conditional Tabular Generative Adversarial Network (CTGAN)** via the SDV library.
