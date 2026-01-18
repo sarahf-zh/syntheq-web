@@ -31,20 +31,82 @@ export const CITIES: CityConfig[] = [
     zoom: 12,
     populationScale: 0.8,
     existingClinicsCount: 8,
-    // FIXED: Widened SF Boundary to ensure South/East (high disparity) areas are included
     polygon: [
-      [37.8120, -122.4780], // Golden Gate
-      [37.8080, -122.4150], // Fisherman's Wharf
-      [37.7950, -122.3900], // Embarcadero
-      [37.7770, -122.3850], // Mission Bay
-      [37.7500, -122.3700], // Hunter's Point (Widened)
-      [37.7100, -122.3800], // Candlestick (Widened)
-      [37.7050, -122.4150], // Visitacion Valley
-      [37.7050, -122.4750], // Daly City Border
-      [37.7050, -122.5120], // Lake Merced
-      [37.7250, -122.5100], // Zoo
-      [37.7750, -122.5150], // Ocean Beach (Widened)
-      [37.7880, -122.4950]  // Sea Cliff
+      [37.8120, -122.4780], [37.8080, -122.4150], [37.7950, -122.3900], 
+      [37.7770, -122.3850], [37.7500, -122.3700], [37.7100, -122.3800], 
+      [37.7050, -122.4150], [37.7050, -122.4750], [37.7050, -122.5120], 
+      [37.7250, -122.5100], [37.7750, -122.5150], [37.7880, -122.4950]
+    ]
+  },
+  {
+    name: "Seattle, WA",
+    center: { lat: 47.6062, lng: -122.3321 },
+    zoom: 11,
+    populationScale: 0.9,
+    existingClinicsCount: 12, // High count for smaller geography = >70% coverage
+    polygon: [
+      [47.7340, -122.3750], // North West (Broadview)
+      [47.7340, -122.2800], // North East (Matthews Beach)
+      [47.6500, -122.2700], // Montlake
+      [47.5800, -122.2800], // Mt Baker
+      [47.5100, -122.2400], // Rainier Beach
+      [47.5000, -122.3000], // South Border
+      [47.5100, -122.3900], // West Seattle South
+      [47.5800, -122.4400], // Alki Point
+      [47.5900, -122.3500], // Port
+      [47.6400, -122.4000], // Magnolia
+      [47.6900, -122.4000]  // Ballard
+    ]
+  },
+  {
+    name: "Washington, D.C.",
+    center: { lat: 38.9072, lng: -77.0369 },
+    zoom: 12,
+    populationScale: 1.0,
+    existingClinicsCount: 12, // Compact city + many clinics = >70% coverage
+    polygon: [
+      [38.9950, -77.0400], // North Tip (Silver Spring border)
+      [38.9300, -76.9100], // East Corner
+      [38.8900, -76.9100], // East Capitol
+      [38.8000, -77.0300], // South Tip (Oxon Hill border)
+      [38.8300, -77.0500], // Alexandria border (Potomac)
+      [38.8900, -77.0700], // Arlington border
+      [38.9300, -77.1200]  // West Corner
+    ]
+  },
+  {
+    name: "Chicago, IL",
+    center: { lat: 41.8781, lng: -87.6298 },
+    zoom: 11,
+    populationScale: 1.2,
+    existingClinicsCount: 9, // Large area + clustered clinics = ~60% coverage
+    polygon: [
+      [42.0200, -87.6600], // Rogers Park (North)
+      [42.0200, -87.8000], // Edison Park (NW)
+      [41.9000, -87.7500], // Austin (West)
+      [41.8000, -87.7200], // Midway Area
+      [41.7000, -87.7000], // Beverly (SW)
+      [41.6500, -87.6000], // Riverdale (South)
+      [41.7300, -87.5200], // East Side
+      [41.8000, -87.5800], // Hyde Park
+      [41.8900, -87.6000]  // Navy Pier
+    ]
+  },
+  {
+    name: "Houston, TX",
+    center: { lat: 29.7604, lng: -95.3698 },
+    zoom: 10, // Zoomed out for sprawl
+    populationScale: 1.1,
+    existingClinicsCount: 6, // Huge area + few clinics = ~50% coverage
+    polygon: [
+      [29.8500, -95.5500], // Northwest (Spring Branch)
+      [29.8800, -95.3500], // North Loop
+      [29.8500, -95.2500], // Northeast
+      [29.7500, -95.2000], // East (Ship Channel)
+      [29.6500, -95.2500], // Southeast (Hobby)
+      [29.6000, -95.4000], // South (NRG area)
+      [29.6500, -95.5000], // Southwest (Bellaire)
+      [29.7200, -95.6000]  // West (Westchase)
     ]
   },
   {
@@ -172,7 +234,7 @@ export const generateSyntheticPopulation = (city: CityConfig): SyntheticBlock[] 
       seeds.forEach(seed => {
         const dist = Math.sqrt(Math.pow(lat - seed.lat, 2) + Math.pow(lng - seed.lng, 2));
         
-        // FIX #1: Wider influence radius (2.5 divisor instead of 3.5) to hit the "corners"
+        // Wider influence radius to hit the "corners"
         const influence = Math.max(0, 1 - (dist / spread * 2.5)); 
 
         if (influence > 0) {
@@ -181,8 +243,7 @@ export const generateSyntheticPopulation = (city: CityConfig): SyntheticBlock[] 
                 population -= (100 * influence); 
             }
             if (seed.type === 'POVERTY') {
-                // FIX #2: STRONGER POVERTY PENALTY
-                // Subtracting 40k ensures low-income areas actually turn red
+                // Stronger poverty penalty
                 income -= (40000 * influence * seed.strength);
                 population += (300 * influence); 
             }
@@ -223,10 +284,7 @@ export const generateInitialClinics = (city: CityConfig): Clinic[] => {
   const safeZoom = typeof city.zoom === 'number' ? city.zoom : 12;
   const zoomDiff = 12 - safeZoom;
   
-  // FIX #3: TIGHTER CLINIC CLUSTERING
-  // Reduced spread from 0.08 to 0.04. 
-  // This clusters existing clinics downtown, making the outskirts (Sunset, Bayview) 
-  // suffer from "Distance Vulnerability", lowering the global coverage score.
+  // Tighter cluster to ensure "outskirts" exist (lowering coverage where appropriate)
   const spread = 0.04 * Math.pow(2, zoomDiff);
   
   let attempts = 0;
