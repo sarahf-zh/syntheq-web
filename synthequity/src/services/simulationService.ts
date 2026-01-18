@@ -6,7 +6,8 @@ const MAX_CONSIDERED_DISTANCE_KM = 8;
 
 // Capability Weights
 const EFFICIENCY_CLINIC = 1.0;
-const EFFICIENCY_KIOSK = 0.6; 
+// FIX: Lowered to 0.4 to ensure Kiosks have a distinct, smaller impact than Clinics
+const EFFICIENCY_KIOSK = 0.4; 
 const EFFICIENCY_BASE = 1.0;
 
 // --- UTILITY: Deterministic RNG (Seeded Random) ---
@@ -89,11 +90,10 @@ export const CITIES: ExtendedCityConfig[] = [
     center: { lat: 38.9072, lng: -77.0369 },
     zoom: 12,
     populationScale: 1.0,
-    // TARGET: <70% Coverage (Reduced clinics to 10)
+    // TARGET: <70% Coverage, Mix of Green/Orange/Red
     existingClinicsCount: 10, 
-    // TARGET: More Red Dots (Increased intensity to 1.8)
     distributionFactor: 1.0,
-    disparityIntensity: 1.8,
+    disparityIntensity: 1.2,
     polygon: [
       [38.9950, -77.0400], [38.9300, -76.9100], [38.8900, -76.9100], 
       [38.8000, -77.0300], [38.8300, -77.0500], [38.8900, -77.0700], 
@@ -120,7 +120,7 @@ export const CITIES: ExtendedCityConfig[] = [
     center: { lat: 29.7604, lng: -95.3698 },
     zoom: 10, 
     populationScale: 1.1,
-    // TARGET: ~30% Coverage, fewer red dots
+    // TARGET: ~30% Coverage
     existingClinicsCount: 30, 
     distributionFactor: 2.5,
     disparityIntensity: 0.2,
@@ -135,7 +135,7 @@ export const CITIES: ExtendedCityConfig[] = [
     center: { lat: 30.2672, lng: -97.7431 },
     zoom: 11,
     populationScale: 0.9,
-    // TARGET: ~30% Coverage, fewer red dots
+    // TARGET: ~30% Coverage
     existingClinicsCount: 8,
     distributionFactor: 1.5,
     disparityIntensity: 0.3,
@@ -151,9 +151,8 @@ export const CITIES: ExtendedCityConfig[] = [
     center: { lat: 33.4484, lng: -112.0740 },
     zoom: 11,
     populationScale: 1.0,
-    // TARGET: ~20% Coverage (Reduced to 9 clinics)
+    // TARGET: ~20% Coverage
     existingClinicsCount: 9,
-    // TARGET: "A bit more red dots" (Intensity 0.6 - moderate)
     distributionFactor: 2.5,
     disparityIntensity: 0.6,
     polygon: [
@@ -171,8 +170,8 @@ export const CITIES: ExtendedCityConfig[] = [
     existingClinicsCount: 12, 
     // TARGET: ~50% Coverage
     distributionFactor: 1.5,
-    // TARGET: More red dots (Increased to 1.4)
-    disparityIntensity: 1.4,
+    // TARGET: Increased Orange/Red dots
+    disparityIntensity: 1.6,
     polygon: [
       [42.0200, -87.6600], [42.0200, -87.8000], [41.9000, -87.7500], 
       [41.8000, -87.7200], [41.7000, -87.7000], [41.6500, -87.6000], 
@@ -279,8 +278,6 @@ export const generateSyntheticPopulation = (city: ExtendedCityConfig): Synthetic
             }
             if (seed.type === 'POVERTY') {
                 // APPLY INTENSITY FACTOR
-                // Higher intensity = Bigger penalty = More Red Dots
-                // Lower intensity = Smaller penalty = Fewer Red Dots
                 income -= ((40000 * intensity) * influence * seed.strength);
                 population += (300 * influence); 
             }
@@ -326,7 +323,6 @@ export const generateInitialClinics = (city: ExtendedCityConfig): Clinic[] => {
   const spread = (0.07 * distFactor) * Math.pow(2, zoomDiff);
   
   let attempts = 0;
-  // INCREASED ATTEMPTS: To ensure clinics spawn in massive cities like Houston
   while (clinics.length < count && attempts < 500) {
     attempts++;
     let lat = city.center.lat + (rng.next() - 0.5) * spread * 2;
@@ -390,8 +386,10 @@ export const calculateDisparityScores = (blocks: SyntheticBlock[], clinics: Clin
     return {
       ...block,
       distanceToNearestClinic: actualPhysicalDistanceToNearest,
+      // FIX: Store effective distance for coverage calculation
+      effectiveDistance: minEffectiveDistance, 
       disparityScore: Math.min(100, Math.max(0, rawScore * 100))
-    };
+    } as SyntheticBlock;
   });
 };
 
@@ -411,8 +409,9 @@ export const getStats = (blocks: SyntheticBlock[], clinics: Clinic[]): Simulatio
   const weightedTotalDisparity = blocks.reduce((acc, b) => acc + (b.disparityScore * b.population), 0);
   const maxDisparity = Math.max(...blocks.map(b => b.disparityScore));
   
+  // FIX: Use Effective Distance for coverage check
   const coveredPopulation = blocks
-    .filter(b => b.distanceToNearestClinic < 3)
+    .filter(b => (b as any).effectiveDistance < 3) 
     .reduce((acc, b) => acc + b.population, 0);
 
   const clinicCount = clinics.filter(c => c.type === 'CLINIC').length;
