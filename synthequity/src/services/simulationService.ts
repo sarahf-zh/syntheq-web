@@ -9,6 +9,27 @@ const EFFICIENCY_CLINIC = 1.0;
 const EFFICIENCY_KIOSK = 0.6; 
 const EFFICIENCY_BASE = 1.0;
 
+// --- UTILITY: Deterministic RNG (Seeded Random) ---
+class SeededRNG {
+  private state: number;
+
+  constructor(seedString: string) {
+    let h = 0x811c9dc5;
+    for (let i = 0; i < seedString.length; i++) {
+      h ^= seedString.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    this.state = h >>> 0;
+  }
+
+  next(): number {
+    let t = (this.state += 0x6D2B79F5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+}
+
 // --- GEOMETRY HELPER: Ray-Casting Algorithm ---
 function isPointInPolygon(point: {lat: number, lng: number}, vs: number[][]) {
   const x = point.lat, y = point.lng;
@@ -24,13 +45,22 @@ function isPointInPolygon(point: {lat: number, lng: number}, vs: number[][]) {
   return inside;
 }
 
-export const CITIES: CityConfig[] = [
+// EXTENDED CONFIGURATION INTERFACE
+interface ExtendedCityConfig extends CityConfig {
+  distributionFactor?: number; 
+  disparityIntensity?: number; 
+}
+
+export const CITIES: ExtendedCityConfig[] = [
   {
     name: "San Francisco, CA",
     center: { lat: 37.7749, lng: -122.4194 },
     zoom: 12,
     populationScale: 0.8,
     existingClinicsCount: 8,
+    // TARGET: 65% Coverage
+    distributionFactor: 0.45, 
+    disparityIntensity: 1.0,
     polygon: [
       [37.8120, -122.4780], [37.8080, -122.4150], [37.7950, -122.3900], 
       [37.7770, -122.3850], [37.7500, -122.3700], [37.7100, -122.3800], 
@@ -43,19 +73,15 @@ export const CITIES: CityConfig[] = [
     center: { lat: 47.6062, lng: -122.3321 },
     zoom: 11,
     populationScale: 0.9,
-    existingClinicsCount: 12, // High count for smaller geography = >70% coverage
+    existingClinicsCount: 11,
+    // TARGET: Low 70s% Coverage, LOTS of red dots
+    distributionFactor: 0.75,
+    disparityIntensity: 1.8, 
     polygon: [
-      [47.7340, -122.3750], // North West (Broadview)
-      [47.7340, -122.2800], // North East (Matthews Beach)
-      [47.6500, -122.2700], // Montlake
-      [47.5800, -122.2800], // Mt Baker
-      [47.5100, -122.2400], // Rainier Beach
-      [47.5000, -122.3000], // South Border
-      [47.5100, -122.3900], // West Seattle South
-      [47.5800, -122.4400], // Alki Point
-      [47.5900, -122.3500], // Port
-      [47.6400, -122.4000], // Magnolia
-      [47.6900, -122.4000]  // Ballard
+      [47.7340, -122.3750], [47.7340, -122.2800], [47.6500, -122.2700], 
+      [47.5800, -122.2800], [47.5100, -122.2400], [47.5000, -122.3000], 
+      [47.5100, -122.3900], [47.5800, -122.4400], [47.5900, -122.3500], 
+      [47.6400, -122.4000], [47.6900, -122.4000]
     ]
   },
   {
@@ -63,50 +89,45 @@ export const CITIES: CityConfig[] = [
     center: { lat: 38.9072, lng: -77.0369 },
     zoom: 12,
     populationScale: 1.0,
-    existingClinicsCount: 12, // Compact city + many clinics = >70% coverage
+    // TARGET: <70% Coverage (Reduced clinics to 10)
+    existingClinicsCount: 10, 
+    // TARGET: More Red Dots (Increased intensity to 1.8)
+    distributionFactor: 1.0,
+    disparityIntensity: 1.8,
     polygon: [
-      [38.9950, -77.0400], // North Tip (Silver Spring border)
-      [38.9300, -76.9100], // East Corner
-      [38.8900, -76.9100], // East Capitol
-      [38.8000, -77.0300], // South Tip (Oxon Hill border)
-      [38.8300, -77.0500], // Alexandria border (Potomac)
-      [38.8900, -77.0700], // Arlington border
-      [38.9300, -77.1200]  // West Corner
+      [38.9950, -77.0400], [38.9300, -76.9100], [38.8900, -76.9100], 
+      [38.8000, -77.0300], [38.8300, -77.0500], [38.8900, -77.0700], 
+      [38.9300, -77.1200]
     ]
   },
   {
-    name: "Chicago, IL",
-    center: { lat: 41.8781, lng: -87.6298 },
-    zoom: 11,
+    name: "Jersey City, NJ",
+    center: { lat: 40.7178, lng: -74.0431 },
+    zoom: 13,
     populationScale: 1.2,
-    existingClinicsCount: 9, // Large area + clustered clinics = ~60% coverage
+    existingClinicsCount: 7,
+    // TARGET: ~74% Coverage
+    distributionFactor: 0.65,
+    disparityIntensity: 1.3,
     polygon: [
-      [42.0200, -87.6600], // Rogers Park (North)
-      [42.0200, -87.8000], // Edison Park (NW)
-      [41.9000, -87.7500], // Austin (West)
-      [41.8000, -87.7200], // Midway Area
-      [41.7000, -87.7000], // Beverly (SW)
-      [41.6500, -87.6000], // Riverdale (South)
-      [41.7300, -87.5200], // East Side
-      [41.8000, -87.5800], // Hyde Park
-      [41.8900, -87.6000]  // Navy Pier
+      [40.7650, -74.0600], [40.7450, -74.0200], [40.7150, -74.0300], 
+      [40.7000, -74.0400], [40.6900, -74.0600], [40.6600, -74.1000], 
+      [40.7000, -74.1200], [40.7400, -74.0800]
     ]
   },
   {
     name: "Houston, TX",
     center: { lat: 29.7604, lng: -95.3698 },
-    zoom: 10, // Zoomed out for sprawl
+    zoom: 10, 
     populationScale: 1.1,
-    existingClinicsCount: 6, // Huge area + few clinics = ~50% coverage
+    // TARGET: ~30% Coverage, fewer red dots
+    existingClinicsCount: 30, 
+    distributionFactor: 2.5,
+    disparityIntensity: 0.2,
     polygon: [
-      [29.8500, -95.5500], // Northwest (Spring Branch)
-      [29.8800, -95.3500], // North Loop
-      [29.8500, -95.2500], // Northeast
-      [29.7500, -95.2000], // East (Ship Channel)
-      [29.6500, -95.2500], // Southeast (Hobby)
-      [29.6000, -95.4000], // South (NRG area)
-      [29.6500, -95.5000], // Southwest (Bellaire)
-      [29.7200, -95.6000]  // West (Westchase)
+      [29.8500, -95.5500], [29.8800, -95.3500], [29.8500, -95.2500], 
+      [29.7500, -95.2000], [29.6500, -95.2500], [29.6000, -95.4000], 
+      [29.6500, -95.5000], [29.7200, -95.6000]
     ]
   },
   {
@@ -114,7 +135,10 @@ export const CITIES: CityConfig[] = [
     center: { lat: 30.2672, lng: -97.7431 },
     zoom: 11,
     populationScale: 0.9,
-    existingClinicsCount: 4,
+    // TARGET: ~30% Coverage, fewer red dots
+    existingClinicsCount: 8,
+    distributionFactor: 1.5,
+    disparityIntensity: 0.3,
     polygon: [
       [30.4500, -97.7500], [30.4200, -97.6800], [30.3500, -97.6500], 
       [30.2900, -97.6000], [30.2200, -97.6500], [30.1800, -97.7000], 
@@ -123,11 +147,46 @@ export const CITIES: CityConfig[] = [
     ]
   },
   {
+    name: "Phoenix, AZ",
+    center: { lat: 33.4484, lng: -112.0740 },
+    zoom: 11,
+    populationScale: 1.0,
+    // TARGET: ~20% Coverage (Reduced to 9 clinics)
+    existingClinicsCount: 9,
+    // TARGET: "A bit more red dots" (Intensity 0.6 - moderate)
+    distributionFactor: 2.5,
+    disparityIntensity: 0.6,
+    polygon: [
+      [33.6800, -112.1500], [33.6800, -111.9500], [33.5800, -111.9500], 
+      [33.5000, -111.9800], [33.4200, -111.9800], [33.3200, -111.9800], 
+      [33.3200, -112.1500], [33.4200, -112.2500], [33.5500, -112.2500], 
+      [33.6200, -112.1800]
+    ]
+  },
+  {
+    name: "Chicago, IL",
+    center: { lat: 41.8781, lng: -87.6298 },
+    zoom: 11,
+    populationScale: 1.2,
+    existingClinicsCount: 12, 
+    // TARGET: ~50% Coverage
+    distributionFactor: 1.5,
+    // TARGET: More red dots (Increased to 1.4)
+    disparityIntensity: 1.4,
+    polygon: [
+      [42.0200, -87.6600], [42.0200, -87.8000], [41.9000, -87.7500], 
+      [41.8000, -87.7200], [41.7000, -87.7000], [41.6500, -87.6000], 
+      [41.7300, -87.5200], [41.8000, -87.5800], [41.8900, -87.6000]
+    ]
+  },
+  {
     name: "Boston, MA",
     center: { lat: 42.3601, lng: -71.0589 },
     zoom: 12,
     populationScale: 1.1,
     existingClinicsCount: 10,
+    distributionFactor: 1.0,
+    disparityIntensity: 1.0,
     polygon: [
       [42.3950, -71.0100], [42.3700, -71.0300], [42.3500, -71.0400], 
       [42.3300, -71.0200], [42.2800, -71.0500], [42.2400, -71.1200], 
@@ -142,35 +201,12 @@ export const CITIES: CityConfig[] = [
     zoom: 12,
     populationScale: 1.0,
     existingClinicsCount: 6,
+    distributionFactor: 1.0,
+    disparityIntensity: 1.0,
     polygon: [
       [39.3700, -76.7100], [39.3700, -76.5300], [39.2800, -76.5300], 
       [39.2600, -76.5600], [39.2200, -76.5500], [39.2000, -76.6000], 
       [39.2500, -76.6500], [39.2800, -76.7100]
-    ]
-  },
-  {
-    name: "Jersey City, NJ",
-    center: { lat: 40.7178, lng: -74.0431 },
-    zoom: 13,
-    populationScale: 1.2,
-    existingClinicsCount: 7,
-    polygon: [
-      [40.7650, -74.0600], [40.7450, -74.0200], [40.7150, -74.0300], 
-      [40.7000, -74.0400], [40.6900, -74.0600], [40.6600, -74.1000], 
-      [40.7000, -74.1200], [40.7400, -74.0800]
-    ]
-  },
-  {
-    name: "Phoenix, AZ",
-    center: { lat: 33.4484, lng: -112.0740 },
-    zoom: 11,
-    populationScale: 1.0,
-    existingClinicsCount: 5,
-    polygon: [
-      [33.6800, -112.1500], [33.6800, -111.9500], [33.5800, -111.9500], 
-      [33.5000, -111.9800], [33.4200, -111.9800], [33.3200, -111.9800], 
-      [33.3200, -112.1500], [33.4200, -112.2500], [33.5500, -112.2500], 
-      [33.6200, -112.1800]
     ]
   }
 ];
@@ -194,22 +230,25 @@ function deg2rad(deg: number) {
 }
 
 // Procedural Generation of Synthetic Population
-export const generateSyntheticPopulation = (city: CityConfig): SyntheticBlock[] => {
+export const generateSyntheticPopulation = (city: ExtendedCityConfig): SyntheticBlock[] => {
   if (!city || !city.center) return [];
 
+  const rng = new SeededRNG(city.name);
   const blocks: SyntheticBlock[] = [];
   const gridSize = 40; 
   const safeZoom = typeof city.zoom === 'number' ? city.zoom : 12;
   const zoomDiff = 12 - safeZoom;
   const spread = 0.15 * Math.pow(2, zoomDiff);
 
-  // SEED LOGIC:
   const seeds = [
     { type: 'WEALTH', lat: city.center.lat + (spread * 0.3), lng: city.center.lng - (spread * 0.2), strength: 0.9 },
-    { type: 'POVERTY', lat: city.center.lat - (spread * 0.2), lng: city.center.lng + (spread * 0.2), strength: 0.9 },
+    { type: 'POVERTY', lat: city.center.lat - (spread * 0.25), lng: city.center.lng + (spread * 0.25), strength: 0.9 },
     { type: 'TRANSIT_HUB', lat: city.center.lat, lng: city.center.lng, strength: 1.0 }, 
     { type: 'TRANSIT_DESERT', lat: city.center.lat + (spread * 0.4), lng: city.center.lng + (spread * 0.4), strength: 0.8 },
   ];
+  
+  // Intensity Scale (Defaults to 1.0 if not set)
+  const intensity = city.disparityIntensity || 1.0;
 
   for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
@@ -225,16 +264,12 @@ export const generateSyntheticPopulation = (city: CityConfig): SyntheticBlock[] 
         }
       }
 
-      // 1. Establish Baseline
-      let income = 45000 + (Math.random() * 30000);
-      let transit = 0.3 + (Math.random() * 0.3);
-      let population = 100 + (Math.random() * 300);
+      let income = 45000 + (rng.next() * 30000);
+      let transit = 0.3 + (rng.next() * 0.3);
+      let population = 100 + (rng.next() * 300);
 
-      // 2. Apply Seed Influence
       seeds.forEach(seed => {
         const dist = Math.sqrt(Math.pow(lat - seed.lat, 2) + Math.pow(lng - seed.lng, 2));
-        
-        // Wider influence radius to hit the "corners"
         const influence = Math.max(0, 1 - (dist / spread * 2.5)); 
 
         if (influence > 0) {
@@ -243,15 +278,17 @@ export const generateSyntheticPopulation = (city: CityConfig): SyntheticBlock[] 
                 population -= (100 * influence); 
             }
             if (seed.type === 'POVERTY') {
-                // Stronger poverty penalty
-                income -= (40000 * influence * seed.strength);
+                // APPLY INTENSITY FACTOR
+                // Higher intensity = Bigger penalty = More Red Dots
+                // Lower intensity = Smaller penalty = Fewer Red Dots
+                income -= ((40000 * intensity) * influence * seed.strength);
                 population += (300 * influence); 
             }
             if (seed.type === 'TRANSIT_HUB') {
                 transit += (0.6 * influence * seed.strength);
             }
             if (seed.type === 'TRANSIT_DESERT') {
-                transit -= (0.4 * influence * seed.strength);
+                transit -= ((0.4 * intensity) * influence * seed.strength);
             }
         }
       });
@@ -275,23 +312,25 @@ export const generateSyntheticPopulation = (city: CityConfig): SyntheticBlock[] 
 };
 
 // Initial existing clinics
-export const generateInitialClinics = (city: CityConfig): Clinic[] => {
+export const generateInitialClinics = (city: ExtendedCityConfig): Clinic[] => {
   if (!city || !city.center) return [];
 
+  const rng = new SeededRNG(city.name);
   const clinics: Clinic[] = [];
   const count = city.existingClinicsCount;
   
   const safeZoom = typeof city.zoom === 'number' ? city.zoom : 12;
   const zoomDiff = 12 - safeZoom;
   
-  // Tighter cluster to ensure "outskirts" exist (lowering coverage where appropriate)
-  const spread = 0.04 * Math.pow(2, zoomDiff);
+  const distFactor = city.distributionFactor || 1.0;
+  const spread = (0.07 * distFactor) * Math.pow(2, zoomDiff);
   
   let attempts = 0;
-  while (clinics.length < count && attempts < 100) {
+  // INCREASED ATTEMPTS: To ensure clinics spawn in massive cities like Houston
+  while (clinics.length < count && attempts < 500) {
     attempts++;
-    let lat = city.center.lat + (Math.random() - 0.5) * spread * 2;
-    let lng = city.center.lng + (Math.random() - 0.5) * spread * 2;
+    let lat = city.center.lat + (rng.next() - 0.5) * spread * 2;
+    let lng = city.center.lng + (rng.next() - 0.5) * spread * 2;
 
     if (city.polygon && !isPointInPolygon({ lat, lng }, city.polygon)) {
         continue;
