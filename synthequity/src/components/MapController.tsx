@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Marker, Popup, useMap, useMapEvents, Polygon } from 'react-leaflet';
 import L from 'leaflet';
 import type { CityConfig, SyntheticBlock, Clinic, Coordinate, FacilityType } from '../types';
 
@@ -46,7 +46,7 @@ interface MapControllerProps {
 // Component to handle map clicks
 const MapEvents: React.FC<{ onMapClick: (c: Coordinate) => void }> = ({ onMapClick }) => {
   const onMapClickRef = useRef(onMapClick);
-   
+    
   useEffect(() => {
     onMapClickRef.current = onMapClick;
   }, [onMapClick]);
@@ -105,8 +105,6 @@ const MapController: React.FC<MapControllerProps> = ({
   onRemoveClinic 
 }) => {
   const [pendingLocation, setPendingLocation] = useState<Coordinate | null>(null);
-  
-  // RESPONSIVENESS FIX: Detect mobile width
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -115,10 +113,8 @@ const MapController: React.FC<MapControllerProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Zoom Logic: On mobile, zoom out by 1 level
   const zoomLevel = isMobile ? city.zoom - 1 : city.zoom;
 
-  // Guard: If city or coordinates are missing/invalid
   if (!city || !city.center || isNaN(city.center.lat) || isNaN(city.center.lng)) {
     return (
       <div className="h-full w-full bg-slate-100 flex items-center justify-center text-slate-400 text-sm">
@@ -134,6 +130,9 @@ const MapController: React.FC<MapControllerProps> = ({
       setPendingLocation(null);
     }
   };
+
+  // Border Style
+  const borderOptions = { color: '#64748b', weight: 2, fill: false, dashArray: '5, 5' };
 
   return (
     <div className="flex-1 min-h-0 w-full h-full relative z-0">
@@ -151,6 +150,14 @@ const MapController: React.FC<MapControllerProps> = ({
         <MapResizer />
         <MapViewUpdater center={city.center} zoom={zoomLevel} />
         <MapEvents onMapClick={setPendingLocation} />
+
+        {/* RENDER CITY BORDER */}
+        {city.polygon && (
+            <Polygon 
+                positions={city.polygon as [number, number][]} 
+                pathOptions={borderOptions} 
+            />
+        )}
 
         {/* Pending Location Selection Menu */}
         {pendingLocation && (
@@ -229,8 +236,6 @@ const MapController: React.FC<MapControllerProps> = ({
                 click: (e) => {
                   L.DomEvent.stopPropagation(e.originalEvent);
                   e.originalEvent.preventDefault();
-                  
-                  // UPDATED: No more check for isExisting. All clinics can be removed.
                   onRemoveClinic(clinic.id);
                 }
               }}
@@ -242,7 +247,6 @@ const MapController: React.FC<MapControllerProps> = ({
                   {clinic.type === 'KIOSK' && "Telehealth Kiosk"}
                   <br />
                   <span className="text-xs font-normal text-slate-500">
-                    {/* UPDATED: Unified instruction text */}
                     Click marker to remove
                   </span>
                 </div>

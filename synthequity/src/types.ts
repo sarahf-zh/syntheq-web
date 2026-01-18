@@ -9,6 +9,7 @@ export interface CityConfig {
   zoom: number;
   populationScale: number; // Density factor
   existingClinicsCount: number; // Number of initial clinics
+  polygon: number[][]; // Array of [lat, lng] arrays
 }
 
 // Represents a cluster of synthetic households (e.g., a Census Block Group)
