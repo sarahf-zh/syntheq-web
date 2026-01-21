@@ -59,8 +59,16 @@ Unlike traditional GIS tools that rely on slow server-side processing, SynthEqui
 
 SynthEquity utilizes a Generative AI model (CTGAN) to produce a privacy-preserving synthetic population from public data. A multivariate regression model is then trained on this synthetic population to power real-time inference for the browser-based dashboard, calculating health disparity scores to identify medical deserts and simulate intervention impacts.
 
-![Architecture Diagram](./synthequity/images/synthequity_arch1.png)
+![Architecture Diagram](./synthequity/images/synthequity_arch_diagram)
 ---
+
+## 🧠 Data Methodology & Privacy
+
+To model healthcare accessibility without compromising individual privacy, **SynthEquity** utilizes a fully synthetic population rather than raw patient records.
+
+* **Generation Engine:** The population was generated using **Conditional Tabular GANs (CTGAN)**, a deep learning-based generative model designed to model the statistical distribution of modern tabular data.
+* **Data Sources:** The model was trained on **202X ACS (American Community Survey) Census microdata** and **OpenStreetMap (OSM)** geospatial nodes for [Target City/Region].
+* **Validation:** The resulting dataset was validated using the **Kolmogorov-Smirnov (KS) Test**, achieving a p-value > 0.05 to ensure the synthetic distribution (income, transit times, demographics) mirrors the real-world ground truth while containing **zero** Personally Identifiable Information (PII).
 
 ## 📊 Validation
 
