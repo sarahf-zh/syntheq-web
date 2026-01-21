@@ -1,5 +1,5 @@
 import type { CityConfig, Clinic, SyntheticBlock, SimulationStats, FacilityType } from '../types';
-import { MODEL_CONFIG } from '../model/trainedModelConfig';
+import { MODEL_CONFIG } from '../model/trainedModelCoeff';
 
 // Constants for the Risk Model
 const MAX_CONSIDERED_DISTANCE_KM = 8; 

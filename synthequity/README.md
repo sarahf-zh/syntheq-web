@@ -46,6 +46,14 @@ When the user requests a report, the app aggregates the simulation statistics (A
 * **Data Sources:** The model was trained on **202X ACS (American Community Survey) Census microdata** and **OpenStreetMap (OSM)** geospatial nodes for [Target City/Region].
 * **Validation:** The resulting dataset was validated using the **Kolmogorov-Smirnov (KS) Test**, achieving a p-value > 0.05 to ensure the synthetic distribution (income, transit times, demographics) mirrors the real-world ground truth while containing **zero** Personally Identifiable Information (PII).
 
+## 🧠 Data Methodology & Privacy
+
+To model healthcare accessibility without compromising individual privacy, **SynthEquity** utilizes a fully synthetic population rather than raw patient records.
+
+* **Generation Engine:** The population was generated using **Conditional Tabular GANs (CTGAN)**, a deep learning-based generative model designed to model the statistical distribution of modern tabular data.
+* **Data Sources:** The model was trained on **202X ACS (American Community Survey) Census microdata** and **OpenStreetMap (OSM)** geospatial nodes for [Target City/Region].
+* **Validation:** The resulting dataset was validated using the **Kolmogorov-Smirnov (KS) Test**, achieving a p-value > 0.05 to ensure the synthetic distribution (income, transit times, demographics) mirrors the real-world ground truth while containing **zero** Personally Identifiable Information (PII).
+
 ## 📊 Validation
 
 To ensure the "Synthetic City" is a mathematical twin of the real city, the model undergoes rigorous statistical testing:

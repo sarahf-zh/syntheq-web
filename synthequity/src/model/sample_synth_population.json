@@ -1,0 +1,577 @@
+[
+  {
+    "synthetic_id": "syn_001_8392",
+    "census_tract": "06075017601",
+    "location": {
+      "lat": 37.774929,
+      "lng": -122.419416
+    },
+    "demographics": {
+      "age_group": "45-64",
+      "household_income": 42500,
+      "insurance_status": "medicaid",
+      "race_ethnicity": "hispanic_or_latino"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.42,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 4.8
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": true
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8393",
+    "census_tract": "06075017601",
+    "location": {
+      "lat": 37.775100,
+      "lng": -122.418900
+    },
+    "demographics": {
+      "age_group": "18-29",
+      "household_income": 88000,
+      "insurance_status": "private",
+      "race_ethnicity": "white"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.89,
+      "vehicle_access": true,
+      "distance_to_nearest_clinic_km": 1.2
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8394",
+    "census_tract": "06075012202",
+    "location": {
+      "lat": 37.751200,
+      "lng": -122.420100
+    },
+    "demographics": {
+      "age_group": "65+",
+      "household_income": 29000,
+      "insurance_status": "medicare",
+      "race_ethnicity": "asian"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.31,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 3.5
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": true
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8395",
+    "census_tract": "06075017602",
+    "location": {
+      "lat": 37.776500,
+      "lng": -122.417800
+    },
+    "demographics": {
+      "age_group": "30-44",
+      "household_income": 125000,
+      "insurance_status": "private",
+      "race_ethnicity": "white"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.95,
+      "vehicle_access": true,
+      "distance_to_nearest_clinic_km": 0.8
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8396",
+    "census_tract": "06075012202",
+    "location": {
+      "lat": 37.752100,
+      "lng": -122.421500
+    },
+    "demographics": {
+      "age_group": "45-64",
+      "household_income": 35000,
+      "insurance_status": "uninsured",
+      "race_ethnicity": "black_or_african_american"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.25,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 5.2
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8397",
+    "census_tract": "06075017601",
+    "location": {
+      "lat": 37.774200,
+      "lng": -122.418500
+    },
+    "demographics": {
+      "age_group": "18-29",
+      "household_income": 52000,
+      "insurance_status": "private",
+      "race_ethnicity": "asian"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.78,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 2.1
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": true
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8398",
+    "census_tract": "06075012202",
+    "location": {
+      "lat": 37.750500,
+      "lng": -122.419800
+    },
+    "demographics": {
+      "age_group": "65+",
+      "household_income": 22000,
+      "insurance_status": "medicare",
+      "race_ethnicity": "hispanic_or_latino"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.22,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 6.0
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": true
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8399",
+    "census_tract": "06075017602",
+    "location": {
+      "lat": 37.777100,
+      "lng": -122.416900
+    },
+    "demographics": {
+      "age_group": "30-44",
+      "household_income": 95000,
+      "insurance_status": "private",
+      "race_ethnicity": "other"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.88,
+      "vehicle_access": true,
+      "distance_to_nearest_clinic_km": 1.5
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8400",
+    "census_tract": "06075012201",
+    "location": {
+      "lat": 37.753500,
+      "lng": -122.422200
+    },
+    "demographics": {
+      "age_group": "0-17",
+      "household_income": 31000,
+      "insurance_status": "medicaid",
+      "race_ethnicity": "hispanic_or_latino"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.35,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 4.1
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": true
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8401",
+    "census_tract": "06075017601",
+    "location": {
+      "lat": 37.775800,
+      "lng": -122.419100
+    },
+    "demographics": {
+      "age_group": "45-64",
+      "household_income": 110000,
+      "insurance_status": "private",
+      "race_ethnicity": "white"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.82,
+      "vehicle_access": true,
+      "distance_to_nearest_clinic_km": 1.1
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8402",
+    "census_tract": "06075012202",
+    "location": {
+      "lat": 37.751800,
+      "lng": -122.420800
+    },
+    "demographics": {
+      "age_group": "30-44",
+      "household_income": 48000,
+      "insurance_status": "uninsured",
+      "race_ethnicity": "white"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.40,
+      "vehicle_access": true,
+      "distance_to_nearest_clinic_km": 5.5
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8403",
+    "census_tract": "06075017602",
+    "location": {
+      "lat": 37.776200,
+      "lng": -122.417500
+    },
+    "demographics": {
+      "age_group": "65+",
+      "household_income": 55000,
+      "insurance_status": "medicare",
+      "race_ethnicity": "black_or_african_american"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.75,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 2.3
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8404",
+    "census_tract": "06075012201",
+    "location": {
+      "lat": 37.754100,
+      "lng": -122.423000
+    },
+    "demographics": {
+      "age_group": "18-29",
+      "household_income": 26000,
+      "insurance_status": "medicaid",
+      "race_ethnicity": "asian"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.28,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 4.9
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": true
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8405",
+    "census_tract": "06075017601",
+    "location": {
+      "lat": 37.774500,
+      "lng": -122.418200
+    },
+    "demographics": {
+      "age_group": "30-44",
+      "household_income": 150000,
+      "insurance_status": "private",
+      "race_ethnicity": "white"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.92,
+      "vehicle_access": true,
+      "distance_to_nearest_clinic_km": 0.5
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8406",
+    "census_tract": "06075012202",
+    "location": {
+      "lat": 37.750900,
+      "lng": -122.419500
+    },
+    "demographics": {
+      "age_group": "45-64",
+      "household_income": 38000,
+      "insurance_status": "medicaid",
+      "race_ethnicity": "hispanic_or_latino"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.33,
+      "vehicle_access": true,
+      "distance_to_nearest_clinic_km": 5.8
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": true
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8407",
+    "census_tract": "06075017602",
+    "location": {
+      "lat": 37.777500,
+      "lng": -122.416200
+    },
+    "demographics": {
+      "age_group": "18-29",
+      "household_income": 72000,
+      "insurance_status": "private",
+      "race_ethnicity": "asian"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.85,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 1.8
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8408",
+    "census_tract": "06075012201",
+    "location": {
+      "lat": 37.752800,
+      "lng": -122.421800
+    },
+    "demographics": {
+      "age_group": "65+",
+      "household_income": 25000,
+      "insurance_status": "medicare",
+      "race_ethnicity": "white"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.29,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 6.2
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8409",
+    "census_tract": "06075017601",
+    "location": {
+      "lat": 37.775500,
+      "lng": -122.418800
+    },
+    "demographics": {
+      "age_group": "30-44",
+      "household_income": 105000,
+      "insurance_status": "private",
+      "race_ethnicity": "other"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.80,
+      "vehicle_access": true,
+      "distance_to_nearest_clinic_km": 1.4
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8410",
+    "census_tract": "06075012202",
+    "location": {
+      "lat": 37.751500,
+      "lng": -122.420500
+    },
+    "demographics": {
+      "age_group": "0-17",
+      "household_income": 33000,
+      "insurance_status": "medicaid",
+      "race_ethnicity": "black_or_african_american"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.38,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 4.5
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8411",
+    "census_tract": "06075017602",
+    "location": {
+      "lat": 37.776800,
+      "lng": -122.417200
+    },
+    "demographics": {
+      "age_group": "45-64",
+      "household_income": 65000,
+      "insurance_status": "private",
+      "race_ethnicity": "asian"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.70,
+      "vehicle_access": true,
+      "distance_to_nearest_clinic_km": 2.8
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": true
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8412",
+    "census_tract": "06075012201",
+    "location": {
+      "lat": 37.753200,
+      "lng": -122.422500
+    },
+    "demographics": {
+      "age_group": "18-29",
+      "household_income": 28000,
+      "insurance_status": "uninsured",
+      "race_ethnicity": "hispanic_or_latino"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.24,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 5.1
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": true
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8413",
+    "census_tract": "06075017601",
+    "location": {
+      "lat": 37.774800,
+      "lng": -122.419000
+    },
+    "demographics": {
+      "age_group": "30-44",
+      "household_income": 135000,
+      "insurance_status": "private",
+      "race_ethnicity": "white"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.91,
+      "vehicle_access": true,
+      "distance_to_nearest_clinic_km": 0.9
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8414",
+    "census_tract": "06075012202",
+    "location": {
+      "lat": 37.750200,
+      "lng": -122.419200
+    },
+    "demographics": {
+      "age_group": "65+",
+      "household_income": 21000,
+      "insurance_status": "medicare",
+      "race_ethnicity": "asian"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.20,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 6.5
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": true
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8415",
+    "census_tract": "06075017602",
+    "location": {
+      "lat": 37.777800,
+      "lng": -122.415800
+    },
+    "demographics": {
+      "age_group": "45-64",
+      "household_income": 90000,
+      "insurance_status": "private",
+      "race_ethnicity": "black_or_african_american"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.76,
+      "vehicle_access": true,
+      "distance_to_nearest_clinic_km": 2.0
+    },
+    "simulation_flags": {
+      "is_medical_desert": false,
+      "requires_translation": false
+    }
+  },
+  {
+    "synthetic_id": "syn_001_8416",
+    "census_tract": "06075012201",
+    "location": {
+      "lat": 37.754500,
+      "lng": -122.423500
+    },
+    "demographics": {
+      "age_group": "18-29",
+      "household_income": 24000,
+      "insurance_status": "medicaid",
+      "race_ethnicity": "white"
+    },
+    "vulnerability_metrics": {
+      "transit_score": 0.26,
+      "vehicle_access": false,
+      "distance_to_nearest_clinic_km": 5.4
+    },
+    "simulation_flags": {
+      "is_medical_desert": true,
+      "requires_translation": false
+    }
+  }
+]
